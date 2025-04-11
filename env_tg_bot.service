@@ -1,0 +1,31 @@
+[Unit]
+Description=env tg bot
+
+# Requirements
+Requires=network.target
+
+# Dependency ordering
+After=network.target
+
+[Service]
+TimeoutStartSec=0
+RestartSec=10
+Restart=always
+
+# path to app
+# WorkingDirectory=/home/webapp/app/
+
+# KillSignal=SIGQUIT
+KillSignal=SIGTERM
+PIDFile=/tmp/env_tg_bot.pid
+Type=simple
+# NotifyAccess=all
+
+# Main process
+ExecStart=
+ExecStop= `cat /tmp/env_tg_bot.pid`
+
+# TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target
