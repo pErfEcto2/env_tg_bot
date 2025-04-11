@@ -21,7 +21,14 @@ def verify_place_choice(message, bot: telebot.TeleBot):
         return
 
     exec_query(f"""insert or replace into users (id, place) values ({message.chat.id}, '{int(message.text) - 1}')""")
-    bot.send_message(message.chat.id, "Понял, принял")
+    bot.send_message(message.chat.id, "Понял, принял, запомнил)")
 
+def int_to_emoji(n: int) -> str:
+    res = ""
+
+    for el in str(n):
+        res += f"{el}\uFE0F\u20E3 "
+
+    return res
 
 
