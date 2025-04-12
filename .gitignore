@@ -1,3 +1,4 @@
 src/config.py
 src/__pycache__
 users.db
+src/data
