@@ -22,8 +22,8 @@ Type=simple
 # NotifyAccess=all
 
 # Main process
-ExecStart=
-ExecStop= `cat /tmp/env_tg_bot.pid`
+ExecStart=start_command
+ExecStop=kill `cat /tmp/env_tg_bot.pid`
 
 # TimeoutStopSec=10
 
