@@ -13,16 +13,16 @@ def exec_query(query: str):
     con.commit()
     return cur.fetchall()
 
-def verify_place_choice(message, bot: telebot.TeleBot, keyboard_after: telebot.types.ReplyKeyboardMarkup):
+def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebot.types.ReplyKeyboardMarkup):
     with open(config.PLACES_FILE_PATH) as f:
-        places = list(map(lambda x: x.strip(), f.readlines()))
+        buildings = list(map(lambda x: x.strip(), f.readlines()))
     
-    if not message.text.isdigit() or int(message.text) < 1 or int(message.text) > len(places):
+    if not message.text.isdigit() or int(message.text) < 1 or int(message.text) > len(buildings):
         bot.send_message(message.chat.id, "Неправильный ввод, попробуй еще раз")
-        bot.register_next_step_handler(message, verify_place_choice, bot, keyboard_after)
+        bot.register_next_step_handler(message, verify_building_choice, bot, keyboard_after)
         return
 
-    exec_query(f"""insert into users values ({message.chat.id}, '{places[int(message.text) - 1]}') on conflict (id) do update set place=excluded.place;""")
+    exec_query(f"""insert into users values ({message.chat.id}, '{buildings[int(message.text) - 1]}') on conflict (id) do update set building=excluded.building;""")
     
     bot.send_message(message.chat.id, "Понял, принял, записал)", reply_markup=keyboard_after)
 
