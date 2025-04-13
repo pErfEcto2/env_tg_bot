@@ -13,10 +13,11 @@ commands = [
     "fact"
 ]
 
-main_keyboard_rows = [
+main_keyboard_buttons = [
     "Сдать пластмассовые бутылки",
     "Сдать алюминиевые банки", 
-    "Сдать крышки от бутылок"
+    "Сдать крышки от бутылок",
+    "Сдать аккумуляторы/ашки"
 ]
 
 help_text = """Привет!
@@ -40,7 +41,7 @@ bot.set_my_commands([
 ])
 
 main_keyboard = telebot.types.ReplyKeyboardMarkup()
-main_keyboard.add(*main_keyboard_rows, row_width=1)
+main_keyboard.add(*main_keyboard_buttons, row_width=2)
 
 
 @bot.message_handler(commands=["start"])
@@ -97,7 +98,9 @@ def answer(message):
             
         case "Сдать крышки от бутылок":
             bot.send_message(message.chat.id, "сдаем крышки от бутылок")
-
+        
+        case "Сдать аккумуляторы/ашки":
+            bot.send_message(message.chat.id, "сдаем аккумуляторы")
 
 bot.infinity_polling()
 

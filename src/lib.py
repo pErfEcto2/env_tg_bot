@@ -1,4 +1,3 @@
-from os import confstr
 import config
 import telebot
 import sqlite3 
@@ -56,5 +55,9 @@ def show_feedbacks(message, bot):
         ans += f"\n------\n{el[0]}"
 
     bot.send_message(message.chat.id, ans)
+
+
+def send_message(chat_id, message):
+    pass
 
 
