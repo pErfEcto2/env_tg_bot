@@ -9,5 +9,5 @@
 6) `./setup.sh`
 
 ## Run
-1) Put in the `src/config.py` API_KEY, PLACES_FILE_PATH, FACTS_FILE_PATH, DB_NAME, SECRET_PASSWORD and ADMIN_PANEL_CHAT_ID
+1) Put in the `src/config.py` API_KEY, PLACES_FILE_PATH, FACTS_FILE_PATH, DB_NAME, SECRET_PASSWORD and MONITOR_CHAT_ID
 2) `systemctl start env_tg_bot.service`

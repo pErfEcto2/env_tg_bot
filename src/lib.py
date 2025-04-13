@@ -24,7 +24,7 @@ def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebo
     is_old_user = bool(exec_query(f"select 1 from users where id = {message.chat.id};"))
     if not is_old_user:
         n = exec_query("select count(*) from users;")[0][0]
-        bot.send_message(config.ADMIN_PANEL_CHAT_ID, f"Новый пользователь добавлен\nТеперь их {n + 1}")
+        bot.send_message(config.MONITOR_CHAT_ID, f"Новый пользователь добавлен\nТеперь их {n + 1}")
 
     exec_query(f"""insert into users values ({message.chat.id}, '{buildings[int(message.text) - 1]}') on conflict (id) do update set building=excluded.building;""")
     
@@ -43,7 +43,7 @@ def group(arr, n):
 
 def add_feedback(message, bot):
     exec_query(f"insert into feedbacks (feedback) values ('{message.text}')")
-    bot.send_message(config.ADMIN_PANEL_CHAT_ID, "Новый отзыв:\n\n" + message.text)
+    bot.send_message(config.MONITOR_CHAT_ID, "Новый отзыв:\n\n" + message.text)
     bot.send_message(message.chat.id, "Записал")
 
 def show_feedbacks(message, bot):

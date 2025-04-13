@@ -46,7 +46,7 @@ main_keyboard.add(*main_keyboard_buttons, row_width=2)
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    if message.chat.id == config.ADMIN_PANEL_CHAT_ID:
+    if message.chat.id == config.MONITOR_CHAT_ID:
         return
 
     with open(config.PLACES_FILE_PATH, "r") as f:
@@ -66,7 +66,7 @@ def start(message):
 
 @bot.message_handler(commands=["help"])
 def help(message):
-    if message.chat.id == config.ADMIN_PANEL_CHAT_ID:
+    if message.chat.id == config.MONITOR_CHAT_ID:
         return
     
     bot.send_message(message.chat.id, help_text, reply_markup=main_keyboard, parse_mode="Markdown")
@@ -74,7 +74,7 @@ def help(message):
 
 @bot.message_handler(commands=["feedback"])
 def feedback(message):
-    if message.chat.id == config.ADMIN_PANEL_CHAT_ID:
+    if message.chat.id == config.MONITOR_CHAT_ID:
         return
     
     bot.send_message(message.chat.id, "Сейчас можешь написать свои впечатления от бота или какие-нибудь пожелани", reply_markup=main_keyboard)
@@ -83,7 +83,7 @@ def feedback(message):
 
 @bot.message_handler(commands=["fact"])
 def fact(message):
-    if message.chat.id == config.ADMIN_PANEL_CHAT_ID:
+    if message.chat.id == config.MONITOR_CHAT_ID:
         return
     
     bot.send_message(message.chat.id, random.choice(facts), reply_markup=main_keyboard)
@@ -91,7 +91,7 @@ def fact(message):
 
 @bot.message_handler(commands=["show_feedbacks"])
 def show_feedbacks(message):
-    if message.chat.id == config.ADMIN_PANEL_CHAT_ID:
+    if message.chat.id == config.MONITOR_CHAT_ID:
         return
     
     bot.send_message(message.chat.id, "Введи супер-секретный пароль", reply_markup=main_keyboard)
@@ -100,7 +100,7 @@ def show_feedbacks(message):
 
 @bot.message_handler(content_types=["text"])
 def answer(message):
-    if message.chat.id == config.ADMIN_PANEL_CHAT_ID:
+    if message.chat.id == config.MONITOR_CHAT_ID:
         return
 
     if not lib.exec_query(f"select * from users where id = {message.chat.id};"):
