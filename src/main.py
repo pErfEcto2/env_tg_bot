@@ -77,7 +77,7 @@ def feedback(message):
     if message.chat.id == config.MONITOR_CHAT_ID:
         return
     
-    bot.send_message(message.chat.id, "Сейчас можешь написать свои впечатления от бота или какие-нибудь пожелани", reply_markup=main_keyboard)
+    bot.send_message(message.chat.id, "Сейчас можешь написать свои впечатления от бота или какие-нибудь пожелани")
     bot.register_next_step_handler(message, lib.add_feedback, bot)
 
 
