@@ -21,9 +21,10 @@ def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebo
         bot.register_next_step_handler(message, verify_building_choice, bot, keyboard_after)
         return
 
-    is_old_user = bool(exec_query(f"select 1 from users where id = {message.chat.id}"))
+    is_old_user = bool(exec_query(f"select 1 from users where id = {message.chat.id};"))
     if not is_old_user:
-        bot.send_message(config.ADMIN_PANEL_CHAT_ID, "Новый пользователь добавлен")
+        n = exec_query("select count(*) from users;")[0][0]
+        bot.send_message(config.ADMIN_PANEL_CHAT_ID, f"Новый пользователь добавлен\nТеперь их {n + 1}")
 
     exec_query(f"""insert into users values ({message.chat.id}, '{buildings[int(message.text) - 1]}') on conflict (id) do update set building=excluded.building;""")
     

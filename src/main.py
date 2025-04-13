@@ -90,7 +90,7 @@ def fact(message):
 
 
 @bot.message_handler(commands=["show_feedbacks"])
-def show_feedback(message):
+def show_feedbacks(message):
     if message.chat.id == config.ADMIN_PANEL_CHAT_ID:
         return
     
