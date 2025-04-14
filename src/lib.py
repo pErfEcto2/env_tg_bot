@@ -6,6 +6,9 @@ import sqlite3
 int_in_emojies = {str(i): f"{i}\uFE0F\u20E3 " for i in range(10)}
 
 def exec_query(query: str):
+    if query is None:
+        return
+
     con = sqlite3.connect(config.DB_NAME)
     cur = con.cursor()
     cur.execute(query)
@@ -13,6 +16,11 @@ def exec_query(query: str):
     return cur.fetchall()
 
 def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebot.types.ReplyKeyboardMarkup):
+    if message.text is None:
+        bot.send_message(message.chat.id, "Отправь текстом")
+        bot.register_next_step_handler(message, verify_building_choice, bot, keyboard_after)
+        return
+
     with open(config.PLACES_FILE_PATH) as f:
         buildings = list(map(lambda x: x.strip(), f.readlines()))
     
@@ -42,11 +50,21 @@ def group(arr, n):
     return [arr[i:i + n] for i in range(0, len(arr), n)]
 
 def add_feedback(message, bot):
+    if message.text is None:
+        bot.send_message(message.chat.id, "Отправь текстом")
+        bot.register_next_step_handler(message, add_feedback, bot)
+        return
+
     exec_query(f"insert into feedbacks (feedback) values ('{message.text}')")
     bot.send_message(config.MONITOR_CHAT_ID, "Новый отзыв:\n\n" + message.text)
     bot.send_message(message.chat.id, "Записал")
 
 def show_feedbacks(message, bot):
+    if message.text is None:
+        bot.send_message(message.chat.id, "Отправь текстом")
+        bot.register_next_step_handler(message, show_feedbacks, bot)
+        return 
+    
     if message.text != config.SECRET_PASSWORD:
         bot.send_message(message.chat.id, "Неправильный пароль")
         return

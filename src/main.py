@@ -91,9 +91,6 @@ def fact(message):
 
 @bot.message_handler(commands=["show_feedbacks"])
 def show_feedbacks(message):
-    if message.chat.id == config.MONITOR_CHAT_ID:
-        return
-    
     bot.send_message(message.chat.id, "Введи супер-секретный пароль", reply_markup=main_keyboard)
     bot.register_next_step_handler(message, lib.show_feedbacks, bot)
 
