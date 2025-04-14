@@ -10,9 +10,7 @@ KillSignal=SIGTERM
 PIDFile=/tmp/env_tg_bot.pid
 Type=simple
 
-User=perfecto
-WorkingDirectory=/home/perfecto/projects/env_tg_bot/
-
+User=USER
 
 # Main process
 ExecStart=/bin/bash PATH_TO_RUN_SH
