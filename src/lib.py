@@ -9,11 +9,13 @@ def exec_query(query: str):
     if query is None:
         return
 
-    con = sqlite3.connect(config.DB_NAME)
-    cur = con.cursor()
-    cur.execute(query)
-    con.commit()
-    return cur.fetchall()
+    with sqlite3.connect(config.DB_NAME) as con:
+        cur = con.cursor()
+        cur.execute(query)
+        con.commit()
+        res = cur.fetchall()
+
+    return res
 
 def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebot.types.ReplyKeyboardMarkup):
     if message.text is None:
