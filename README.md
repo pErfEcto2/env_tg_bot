@@ -5,8 +5,7 @@
 2) `pip3 -r requirements.txt`
 3) `chmod 755 run.sh`
 4) `chmod 755 setup.sh`
-5) Edit the env_tg_bot.service file to be able to start the bot
-6) `./setup.sh`
+5) `./setup.sh`
 
 ## Run
 1) Put in the `src/config.py` API_KEY, PLACES_FILE_PATH, FACTS_FILE_PATH, DB_NAME, SECRET_PASSWORD and MONITOR_CHAT_ID

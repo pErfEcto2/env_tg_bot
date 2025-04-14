@@ -1,31 +1,22 @@
 [Unit]
 Description=env tg bot
 
-# Requirements
-Requires=network.target
-
-# Dependency ordering
-After=network.target
-
 [Service]
 TimeoutStartSec=0
 RestartSec=10
 Restart=always
 
-# path to app
-# WorkingDirectory=/home/webapp/app/
-
-# KillSignal=SIGQUIT
 KillSignal=SIGTERM
 PIDFile=/tmp/env_tg_bot.pid
 Type=simple
-# NotifyAccess=all
+
+User=perfecto
+WorkingDirectory=/home/perfecto/projects/env_tg_bot/
+
 
 # Main process
-ExecStart=start_command
-ExecStop=kill `cat /tmp/env_tg_bot.pid`
-
-# TimeoutStopSec=10
+ExecStart=/bin/bash PATH_TO_RUN_SH
+ExecStop=/bin/kill -TERM $(cat /tmp/env_tg_bot.pid)
 
 [Install]
 WantedBy=multi-user.target
