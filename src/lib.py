@@ -17,7 +17,7 @@ def exec_query(query: str):
 
 def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebot.types.ReplyKeyboardMarkup):
     if message.text is None:
-        bot.send_message(message.chat.id, "Отправь текстом")
+        bot.send_message(message.chat.id, "Отправь, пожалуйста, сообщение текстом:")
         bot.register_next_step_handler(message, verify_building_choice, bot, keyboard_after)
         return
 
@@ -36,7 +36,7 @@ def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebo
 
     exec_query(f"""insert into users values ({message.chat.id}, '{buildings[int(message.text) - 1]}') on conflict (id) do update set building=excluded.building;""")
     
-    bot.send_message(message.chat.id, "Понял, принял, записал)", reply_markup=keyboard_after)
+    bot.send_message(message.chat.id, "Выбери тип отходов:", reply_markup=keyboard_after)
 
 def int_to_emoji(n: int) -> str:
     res = ""
@@ -51,7 +51,7 @@ def group(arr, n):
 
 def add_feedback(message, bot):
     if message.text is None:
-        bot.send_message(message.chat.id, "Отправь текстом")
+        bot.send_message(message.chat.id, "Отправь, пожалуйста, сообщение текстом:")
         bot.register_next_step_handler(message, add_feedback, bot)
         return
 
@@ -61,7 +61,7 @@ def add_feedback(message, bot):
 
 def show_feedbacks(message, bot):
     if message.text is None:
-        bot.send_message(message.chat.id, "Отправь текстом")
+        bot.send_message(message.chat.id, "Отправь, пожалуйста, сообщение текстом:")
         bot.register_next_step_handler(message, show_feedbacks, bot)
         return 
     

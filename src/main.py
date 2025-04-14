@@ -1,3 +1,4 @@
+from os import stat
 import telebot
 import lib
 import config
@@ -14,10 +15,12 @@ commands = [
 ]
 
 main_keyboard_buttons = [
-    "Сдать пластмассовые бутылки",
-    "Сдать алюминиевые банки", 
-    "Сдать крышки от бутылок",
-    "Сдать аккумуляторы/ашки"
+    "Сдать пластмассовые бутылки 🫙",
+    "Сдать алюминиевые банки 🥫", 
+    "Сдать крышки от бутылок 🔴",
+    "Сдать аккумуляторы/ашки 🔋",
+    "Где я?",
+    "Поменять корпус"
 ]
 
 help_text = """Привет!
@@ -41,7 +44,9 @@ bot.set_my_commands([
 ])
 
 main_keyboard = telebot.types.ReplyKeyboardMarkup()
-main_keyboard.add(*main_keyboard_buttons, row_width=2)
+main_keyboard.add(*main_keyboard_buttons[:4], row_width=2)
+main_keyboard.add(main_keyboard_buttons[4])
+main_keyboard.add(main_keyboard_buttons[5])
 
 
 @bot.message_handler(commands=["start"])
@@ -52,7 +57,7 @@ def start(message):
     with open(config.PLACES_FILE_PATH, "r") as f:
         buildings = list(map(lambda x: x.strip(), f.readlines()))
 
-    ans = "Для начала работы, выбери ближайший к тебе корпус *(напиши его номер из списка ниже)*:\n\n"
+    ans = "Выбери ближайший к тебе корпус *(напиши его номер из списка ниже)*:\n\n"
     for i, building in enumerate(buildings):
         ans += f"{lib.int_to_emoji(i + 1)} - {building}\n"
     
@@ -69,7 +74,7 @@ def help(message):
     if message.chat.id == config.MONITOR_CHAT_ID:
         return
     
-    bot.send_message(message.chat.id, help_text, reply_markup=main_keyboard, parse_mode="Markdown")
+    bot.send_message(message.chat.id, help_text, parse_mode="Markdown")
 
 
 @bot.message_handler(commands=["feedback"])
@@ -86,7 +91,7 @@ def fact(message):
     if message.chat.id == config.MONITOR_CHAT_ID:
         return
     
-    bot.send_message(message.chat.id, random.choice(facts), reply_markup=main_keyboard)
+    bot.send_message(message.chat.id, "Интересный факт ♻️\n\n" + random.choice(facts), reply_markup=main_keyboard)
 
 
 @bot.message_handler(commands=["show_feedbacks"])
@@ -105,17 +110,25 @@ def answer(message):
         return
     
     match message.text:
-        case "Сдать пластмассовые бутылки":
-            bot.send_message(message.chat.id, "сдаем пластмассовые бутылки")
+        case "Сдать пластмассовые бутылки 🫙":
+            bot.send_message(message.chat.id, "сдаем пластмассовые бутылки 🫙")
             
-        case "Сдать алюминиевые банки":
-            bot.send_message(message.chat.id, "сдаем алюминиевые банки")
+        case "Сдать алюминиевые банки 🥫":
+            bot.send_message(message.chat.id, "сдаем алюминиевые банки 🥫")
             
-        case "Сдать крышки от бутылок":
-            bot.send_message(message.chat.id, "сдаем крышки от бутылок")
+        case "Сдать крышки от бутылок 🔴":
+            bot.send_message(message.chat.id, "сдаем крышки от бутылок 🔴")
         
-        case "Сдать аккумуляторы/ашки":
-            bot.send_message(message.chat.id, "сдаем аккумуляторы")
+        case "Сдать аккумуляторы/ашки 🔋":
+            bot.send_message(message.chat.id, "сдаем аккумуляторы 🔋")
+
+        case "Где я?":
+            building = lib.exec_query(f"select building from users where id = {message.chat.id}")[0][0]
+            bot.send_message(message.chat.id, f"У тебя выбран адрес:\n{building}", reply_markup=main_keyboard)
+
+        case "Поменять корпус":
+            start(message)
+        
 
 bot.infinity_polling()
 
