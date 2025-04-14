@@ -36,7 +36,7 @@ def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebo
         n = exec_query("select count(*) from users;")[0][0]
         bot.send_message(config.MONITOR_CHAT_ID, f"Новый пользователь добавлен\nТеперь их {n + 1}")
 
-    exec_query(f"""insert into users values ({message.chat.id}, '{buildings[int(message.text) - 1]}') on conflict (id) do update set building=excluded.building;""")
+    exec_query(f"""insert into users values ({message.chat.id}, '{int(message.text)}') on conflict (id) do update set building_id = excluded.building_id;""")
     
     bot.send_message(message.chat.id, "Выбери тип отходов:", reply_markup=keyboard_after)
 

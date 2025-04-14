@@ -1,4 +1,3 @@
-from os import stat
 import telebot
 import lib
 import config
@@ -123,7 +122,7 @@ def answer(message):
             bot.send_message(message.chat.id, "сдаем аккумуляторы 🔋")
 
         case "Где я?":
-            building = lib.exec_query(f"select building from users where id = {message.chat.id}")[0][0]
+            building = lib.exec_query(f"select address from users u join buildings b on u.building_id = b.id where u.id = {message.chat.id}")[0][0]
             bot.send_message(message.chat.id, f"У тебя выбран адрес:\n{building}", reply_markup=main_keyboard)
 
         case "Поменять корпус":
