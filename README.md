@@ -5,6 +5,7 @@
 2) `pip3 -r requirements.txt`
 3) `chmod 755 run.sh`
 4) `chmod 755 setup.sh`
+5) add to the table "waste_collection_points" in the users.db 
 5) `./setup.sh`
 
 ## Run
