@@ -112,16 +112,16 @@ def answer(message):
     
     match message.text:
         case "Пластмассовые бутылки 🫙":
-            query = f"select description, address from plastic p join users u using (building_id)"
+            query = f"select description, address from plastic p join users u using (building_id) where u.id = {message.chat.id}"
 
         case "Алюминиевые банки 🥫":
-            query = f"select description, address from metall p join users u using (building_id)"
+            query = f"select description, address from metall p join users u using (building_id) where u.id = {message.chat.id}"
             
         case "Крышки от бутылок 🔴":
-            query = f"select description, address from caps p join users u using (building_id)"
+            query = f"select description, address from caps p join users u using (building_id) where u.id = {message.chat.id}"
         
         case "Аккумуляторы/ашки 🔋":
-            query = f"select description, address from battaries p join users u using (building_id)"
+            query = f"select description, address from battaries p join users u using (building_id) where u.id = {message.chat.id}"
 
         case "Где я?":
             building = lib.exec_query(f"select address from users u join buildings b on u.building_id = b.id where u.id = {message.chat.id}")[0][0]
@@ -131,7 +131,8 @@ def answer(message):
             start(message)
         
     if message.text in main_keyboard_buttons[:4]:
-        lib.send_addresses(message.chat.id, bot, lib.exec_query(query))
+        data = lib.exec_query(query)
+        lib.send_addresses(message.chat.id, bot, data)
 
 bot.infinity_polling()
 
