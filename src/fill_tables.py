@@ -18,7 +18,7 @@ with sqlite3.connect(config.DB_NAME) as con:
 
         for i, row in enumerate(data[table]):
             if table != "buildings":
-                cur.execute(f"insert into {table} values ({i}, {row[0]}, {",".join(row[1:])})")
+                cur.execute(f"insert into {table} values ({i}, {row[0]}, {",".join(row[1:])}, null, null)")
             else:
                 cur.execute(f"insert into {table} values ({row[0]}, {",".join(row[1:])})")
         

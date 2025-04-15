@@ -1,6 +1,8 @@
 import config
 import telebot
 import sqlite3 
+import requests
+import urllib.parse
 
 
 int_in_emojies = {str(i): f"{i}\uFE0F\u20E3 " for i in range(10)}
@@ -80,4 +82,35 @@ def show_feedbacks(message, bot):
         ans += f"\n------\n{el[0]}"
 
     bot.send_message(message.chat.id, ans)
+
+def addr_to_coords(address):
+    try:
+        encoded_address = urllib.parse.quote(address)
+        resp = requests.get(f"https://geocode-maps.yandex.ru/v1/?apikey={config.YANDEX_API_KEY}&geocode={encoded_address}&format=json")
+        if resp.status_code != 200:
+            return [0, 0]
+
+        data = resp.json()
+        lon, lat = data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split(" ")
+        return [lat, lon]
+    except Exception:
+        return [0, 0]
+
+def send_addresses(message_chat_id, bot, places):
+    if not places:
+        bot.send_message(message_chat_id, "К сожалению, ничего не найдено")
+        return
+    else:
+        bot.send_message(message_chat_id, "Вот, что мне удалось найти:")
+    
+    for description, address in places:
+        lat, lon = addr_to_coords(address)
+        bot.send_message(message_chat_id, "Описание:\n" + description)
+
+        if lat == 0 and lon == 0:
+            bot.send_message(message_chat_id, "Адрес пункта:\n" + address)
+            continue
+
+        bot.send_location(message_chat_id, lat, lon)
+
 

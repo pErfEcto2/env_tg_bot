@@ -10,6 +10,6 @@
 7) fill the buildings.csv, metal.csv, plastic.csv, metall.csv and battaries.csv with neccessary places (buildings.csv format: id, address; other files: id, description, address)
 
 ## Run
-1) Put in the `src/config.py` API_KEY, FACTS_FILE_PATH, DB_NAME, SECRET_PASSWORD and MONITOR_CHAT_ID 
+1) Put in the `src/config.py` API_KEY, FACTS_FILE_PATH, DB_NAME, SECRET_PASSWORD, MONITOR_CHAT_ID and YANDEX_API_KEY
 2) `systemctl start env_tg_bot.service`
 

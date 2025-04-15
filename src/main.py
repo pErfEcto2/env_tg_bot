@@ -1,4 +1,5 @@
 import telebot
+from telebot.types import MessageOriginUser
 import lib
 import config
 import random
@@ -107,18 +108,20 @@ def answer(message):
         start(message)
         return
     
+    query = ""
+    
     match message.text:
         case "Пластмассовые бутылки 🫙":
-            bot.send_message(message.chat.id, "сдаем пластмассовые бутылки 🫙")
-            
+            query = f"select description, address from plastic p join users u using (building_id)"
+
         case "Алюминиевые банки 🥫":
-            bot.send_message(message.chat.id, "сдаем алюминиевые банки 🥫")
+            query = f"select description, address from metall p join users u using (building_id)"
             
         case "Крышки от бутылок 🔴":
-            bot.send_message(message.chat.id, "сдаем крышки от бутылок 🔴")
+            query = f"select description, address from caps p join users u using (building_id)"
         
         case "Аккумуляторы/ашки 🔋":
-            bot.send_message(message.chat.id, "сдаем аккумуляторы 🔋")
+            query = f"select description, address from battaries p join users u using (building_id)"
 
         case "Где я?":
             building = lib.exec_query(f"select address from users u join buildings b on u.building_id = b.id where u.id = {message.chat.id}")[0][0]
@@ -127,6 +130,8 @@ def answer(message):
         case "Поменять корпус":
             start(message)
         
+    if message.text in main_keyboard_buttons[:4]:
+        lib.send_addresses(message.chat.id, bot, lib.exec_query(query))
 
 bot.infinity_polling()
 
