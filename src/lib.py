@@ -8,9 +8,6 @@ import urllib.parse
 int_in_emojies = {str(i): f"{i}\uFE0F\u20E3 " for i in range(10)}
 
 def exec_query(query: str):
-    if query is None:
-        return
-
     with sqlite3.connect(config.DB_NAME) as con:
         cur = con.cursor()
         cur.execute(query)
@@ -84,6 +81,15 @@ def show_feedbacks(message, bot):
     bot.send_message(message.chat.id, ans)
 
 def addr_to_coords(address):
+    rows = exec_query(f"""select lat, lon, address from plastic where address = '{address}' union\
+                              select lat, lon, address from metall where address = '{address}' union\
+                              select lat, lon, address from caps where address = '{address}' union\
+                              select lat, lon, address from battaries where address = '{address}'""")
+
+    for row in rows:
+        if all(row[:2]):
+            return [float(row[0]), float(row[1])]
+
     try:
         encoded_address = urllib.parse.quote(address)
         resp = requests.get(f"https://geocode-maps.yandex.ru/v1/?apikey={config.YANDEX_API_KEY}&geocode={encoded_address}&format=json")
@@ -92,6 +98,13 @@ def addr_to_coords(address):
 
         data = resp.json()
         lon, lat = data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split(" ")
+        lat, lon = float(lat), float(lon)
+
+        exec_query(f"update plastic set lat = {lat}, lon = {lon} where address = '{address}';")
+        exec_query(f"update metall set lat = {lat}, lon = {lon} where address = '{address}';")
+        exec_query(f"update caps set lat = {lat}, lon = {lon} where address = '{address}';")
+        exec_query(f"update battaries set lat = {lat}, lon = {lon} where address = '{address}';")
+
         return [lat, lon]
     except Exception:
         return [0, 0]
