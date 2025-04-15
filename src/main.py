@@ -53,8 +53,7 @@ def start(message):
     if message.chat.id == config.MONITOR_CHAT_ID:
         return
 
-    with open(config.PLACES_FILE_PATH, "r") as f:
-        buildings = list(map(lambda x: x.strip(), f.readlines()))
+    buildings = list(map(lambda x: x[0], lib.exec_query("select address from buildings")))
 
     ans = "Выбери ближайший к тебе корпус *(напиши его номер из списка ниже)*:\n\n"
     for i, building in enumerate(buildings):

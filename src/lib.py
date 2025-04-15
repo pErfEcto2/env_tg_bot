@@ -23,8 +23,7 @@ def verify_building_choice(message, bot: telebot.TeleBot, keyboard_after: telebo
         bot.register_next_step_handler(message, verify_building_choice, bot, keyboard_after)
         return
 
-    with open(config.PLACES_FILE_PATH) as f:
-        buildings = list(map(lambda x: x.strip(), f.readlines()))
+    buildings = list(map(lambda x: x[0], exec_query("select address from buildings")))
     
     if not message.text.isdigit() or int(message.text) < 1 or int(message.text) > len(buildings):
         bot.send_message(message.chat.id, "Неправильный ввод, попробуй еще раз")
