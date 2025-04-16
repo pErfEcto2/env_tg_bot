@@ -1,5 +1,4 @@
 import telebot
-from telebot.types import MessageOriginUser
 import lib
 import config
 import random
@@ -63,6 +62,7 @@ def start(message):
     nums_keyboard = telebot.types.ReplyKeyboardMarkup()
     for row in lib.group(range(1, len(buildings) + 1), 4):
         nums_keyboard.add(*list(map(lambda x: str(x), row)), row_width=4)
+    nums_keyboard.add("Отмена")
     
     bot.send_message(message.chat.id, ans, parse_mode="Markdown", reply_markup=nums_keyboard)
     bot.register_next_step_handler(message, lib.verify_building_choice, bot, main_keyboard)
@@ -81,7 +81,7 @@ def feedback(message):
     if message.chat.id == config.MONITOR_CHAT_ID:
         return
     
-    bot.send_message(message.chat.id, "Сейчас можешь написать свои впечатления от бота или какие-нибудь пожелани")
+    bot.send_message(message.chat.id, "Сейчас можешь написать свои впечатления от бота или какие-нибудь пожелания")
     bot.register_next_step_handler(message, lib.add_feedback, bot)
 
 
@@ -108,20 +108,20 @@ def answer(message):
         start(message)
         return
     
-    query = ""
+    table = ""
     
     match message.text:
         case "Пластмассовые бутылки 🫙":
-            query = f"select description, address from plastic p join users u using (building_id) where u.id = {message.chat.id}"
+            table = "plastic"
 
         case "Алюминиевые банки 🥫":
-            query = f"select description, address from metall p join users u using (building_id) where u.id = {message.chat.id}"
+            table = "metall"
             
         case "Крышки от бутылок 🔴":
-            query = f"select description, address from caps p join users u using (building_id) where u.id = {message.chat.id}"
+            table = "caps"
         
         case "Аккумуляторы/ашки 🔋":
-            query = f"select description, address from battaries p join users u using (building_id) where u.id = {message.chat.id}"
+            table = "battaries"
 
         case "Где я?":
             building = lib.exec_query(f"select address from users u join buildings b on u.building_id = b.id where u.id = {message.chat.id}")[0][0]
@@ -131,7 +131,7 @@ def answer(message):
             start(message)
         
     if message.text in main_keyboard_buttons[:4]:
-        data = lib.exec_query(query)
+        data = lib.exec_query(f"select description, address from {table} p join users u using (building_id) where u.id = {message.chat.id}")
         lib.send_addresses(message.chat.id, bot, data)
 
 bot.infinity_polling()
