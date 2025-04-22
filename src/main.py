@@ -99,6 +99,12 @@ def show_feedbacks(message):
     bot.register_next_step_handler(message, lib.show_feedbacks, bot)
 
 
+@bot.message_handler(commands=["show_stats"])
+def show_stats(message):
+    bot.send_message(message.chat.id, "Введи супер-секретный пароль")
+    bot.register_next_step_handler(message, lib.show_stats, bot)
+
+
 @bot.message_handler(content_types=["text"])
 def answer(message):
     if message.chat.id == config.MONITOR_CHAT_ID:

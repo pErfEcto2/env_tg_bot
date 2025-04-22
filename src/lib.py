@@ -130,4 +130,23 @@ def send_addresses(message_chat_id, bot, places):
 
         bot.send_location(message_chat_id, lat, lon)
 
+def show_stats(message, bot):
+    if message.text is None:
+        bot.send_message(message.chat.id, "Отправь, пожалуйста, сообщение текстом:")
+        bot.register_next_step_handler(message, show_stats, bot)
+        return 
+    
+    if message.text != config.SECRET_PASSWORD:
+        bot.send_message(message.chat.id, "Неправильный пароль")
+        return
+    
+    min_count = exec_query("select min(count) from users")[0][0]
+    max_count = exec_query("select max(count) from users")[0][0]
+    avg_count = exec_query("select avg(count) from users")[0][0]
+
+    ans = f"Минимальное количество использований: {min_count}\n"
+    ans += f"Максимальное количество использований: {max_count}\n"
+    ans += f"Среднее количество использований: {avg_count}"
+
+    bot.send_message(message.chat.id, ans)
 
