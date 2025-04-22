@@ -119,7 +119,7 @@ def send_addresses(message_chat_id, bot, places):
         return
     else:
         if not exec_query(f"select count from users where id = {message_chat_id}"):
-            exec_query(f"update table users set count = 0 where id = {message_chat_id}")
+            exec_query(f"update users set count = 0 where id = {message_chat_id}")
         
         exec_query("update users set count = count + 1")
         bot.send_message(message_chat_id, "Вот, что мне удалось найти:")
