@@ -131,6 +131,11 @@ def answer(message):
             start(message)
         
     if message.text in main_keyboard_buttons[:4]:
+        if lib.exec_query(f"select count from users where id = {message.chat.id}")[0][0] is None:
+            lib.exec_query(f"update users set count = 0 where id = {message.chat.id}")
+
+        lib.exec_query(f"update users set count = count + 1 where id = {message.chat.id}")
+
         data = lib.exec_query(f"select description, address from {table} p join users u using (building_id) where u.id = {message.chat.id}")
         lib.send_addresses(message.chat.id, bot, data)
 
