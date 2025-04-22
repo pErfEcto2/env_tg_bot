@@ -146,7 +146,7 @@ def show_stats(message, bot):
 
     ans = f"Минимальное количество использований: {min_count}\n"
     ans += f"Максимальное количество использований: {max_count}\n"
-    ans += f"Среднее количество использований: {avg_count}"
+    ans += f"Среднее количество использований: {avg_count:.2f}"
 
     bot.send_message(message.chat.id, ans)
 
