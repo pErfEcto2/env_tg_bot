@@ -88,6 +88,7 @@ def addr_to_coords(address):
     rows = exec_query(f"""select lat, lon, address from plastic where address = '{address}' union\
                               select lat, lon, address from metall where address = '{address}' union\
                               select lat, lon, address from caps where address = '{address}' union\
+                              select lat, lon, address from paper where address = '{address}' union\
                               select lat, lon, address from battaries where address = '{address}'""")
 
     for row in rows:
@@ -107,6 +108,7 @@ def addr_to_coords(address):
         exec_query(f"update plastic set lat = {lat}, lon = {lon} where address = '{address}';")
         exec_query(f"update metall set lat = {lat}, lon = {lon} where address = '{address}';")
         exec_query(f"update caps set lat = {lat}, lon = {lon} where address = '{address}';")
+        exec_query(f"update paper set lat = {lat}, lon = {lon} where address = '{address}';")
         exec_query(f"update battaries set lat = {lat}, lon = {lon} where address = '{address}';")
 
         return [lat, lon]

@@ -18,6 +18,7 @@ main_keyboard_buttons = [
     "Алюминиевые банки 🥫", 
     "Крышки от бутылок 🔴",
     "Аккумуляторы/ашки 🔋",
+    "Макулатура 📑",
     "Где я?",
     "Поменять корпус"
 ]
@@ -43,7 +44,7 @@ bot.set_my_commands([
 ])
 
 main_keyboard = telebot.types.ReplyKeyboardMarkup()
-main_keyboard.add(*main_keyboard_buttons[:4], row_width=2)
+main_keyboard.add(*main_keyboard_buttons[:5], row_width=2)
 main_keyboard.add(main_keyboard_buttons[4])
 main_keyboard.add(main_keyboard_buttons[5])
 
@@ -129,6 +130,9 @@ def answer(message):
         case "Аккумуляторы/ашки 🔋":
             table = "battaries"
 
+        case "Макулатура 📑":
+            table = "paper"
+
         case "Где я?":
             building = lib.exec_query(f"select address from users u join buildings b on u.building_id = b.id where u.id = {message.chat.id}")[0][0]
             bot.send_message(message.chat.id, f"У тебя выбран адрес:\n{building}", reply_markup=main_keyboard)
@@ -136,7 +140,7 @@ def answer(message):
         case "Поменять корпус":
             start(message)
         
-    if message.text in main_keyboard_buttons[:4]:
+    if message.text in main_keyboard_buttons[:5]:
         if lib.exec_query(f"select count from users where id = {message.chat.id}")[0][0] is None:
             lib.exec_query(f"update users set count = 0 where id = {message.chat.id}")
 

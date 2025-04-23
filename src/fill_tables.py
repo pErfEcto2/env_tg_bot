@@ -4,7 +4,7 @@ import config
 
 
 data = dict()
-for file_name in ["metall", "caps", "battaries", "plastic", "buildings"]:
+for file_name in ["metall", "caps", "battaries", "plastic", "buildings", "paper"]:
     with open("src/data/" + file_name + ".csv", "r") as f:
         for row in csv.reader(f):
             if data.get(file_name) is None:
