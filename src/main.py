@@ -45,8 +45,8 @@ bot.set_my_commands([
 
 main_keyboard = telebot.types.ReplyKeyboardMarkup()
 main_keyboard.add(*main_keyboard_buttons[:5], row_width=2)
-main_keyboard.add(main_keyboard_buttons[4])
 main_keyboard.add(main_keyboard_buttons[5])
+main_keyboard.add(main_keyboard_buttons[6])
 
 
 @bot.message_handler(commands=["start"])
